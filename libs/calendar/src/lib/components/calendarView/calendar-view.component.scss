@@ -1,0 +1,65 @@
+/* Set up the calendar container */
+.calendar-container {
+//   display: grid;
+//   grid-template-rows: auto 1fr;
+//   grid-template-columns: 60px repeat(4, 1fr);
+//   grid-template-areas: 
+//     "hour header header header header"
+//     "time event event event event";
+//   border: 1px solid black;
+}
+
+/* Style the calendar header */
+.calendar-header {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 60px repeat(4, 1fr);
+  grid-template-areas: 
+    "hour day day day day";
+  border-bottom: 1px solid black;
+  background-color: lightgray;
+}
+
+/* Style the calendar hour column */
+.calendar-hour {
+  grid-area: hour;
+  padding: 10px;
+  border-right: 1px solid black;
+}
+
+/* Style the calendar day columns */
+.calendar-day {
+  grid-area: day;
+  padding: 10px;
+  border-right: 1px solid black;
+}
+
+/* Style the calendar body */
+.calendar-body {
+  grid-area: time / event / event / event / event;
+  display: grid;
+  grid-template-columns: 60px repeat(4, 1fr);
+}
+
+/* Style the calendar time column */
+.calendar-time {
+  padding: 10px;
+  border-right: 1px solid black;
+}
+
+/* Style the calendar event cells */
+.calendar-event {
+  padding: 10px;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+/* Remove the right border from the last item in each row */
+.calendar-event:nth-child(5n) {
+  border-right: none;
+}
+
+/* Remove the bottom border from the last row of items */
+.calendar-event:nth-last-child(-n+5) {
+  border-bottom: none;
+}
