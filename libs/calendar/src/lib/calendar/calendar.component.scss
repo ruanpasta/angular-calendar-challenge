@@ -1,3 +1,7 @@
+.calendar-container {
+  @apply h-full grid grid-cols-[300px_1fr] gap-3;
+}
+
 .inline-calendar-card {
     width: 300px;
 }
