@@ -1,23 +1,37 @@
-<mat-grid-list class="calendar-weekly-container" cols="13" rowHeight="40px">
+<mat-grid-list
+  class="calendar-weekly-container"
+  [cols]="calendarColumns"
+  rowHeight="50px"
+>
   <mat-grid-tile
-      class="calendar-weekly-header"
-      *ngFor="let tile of weekDaysTiles"
-      (click)="onCalendarTileClick(tile, 'weekly')"
-      [colspan]="tile.event.cols"
-      [rowspan]="tile.event.rows"
-      [style.background]="tile.event.color">
+    class="calendar-weekly-header"
+    *ngFor="let tile of weekDaysTiles"
+    (click)="onCalendarTileClick(tile, 'weekly')"
+    [colspan]="tile.event.cols"
+    [rowspan]="tile.event.rows"
+    [style.background]="tile.event.color"
+  >
     <div *ngIf="tile.event.text">
-      {{tile.event.text}}
+      {{ tile.event.text }}
     </div>
   </mat-grid-tile>
   <mat-grid-tile
-      *ngFor="let tile of hourlyTiles"
-      (click)="onCalendarTileClick(tile, 'weekly')"
-      [colspan]="tile.event.cols"
-      [rowspan]="tile.event.rows"
-      [style.background]="tile.event.color">
-    <div *ngIf="tile.event.text">
-      {{tile.event.text}}
+    *ngFor="let tile of hourlyTiles"
+    (click)="onCalendarTileClick(tile, 'weekly')"
+    [colspan]="tile.event.cols"
+    [rowspan]="tile.event.rows"
+    [style.background]="tile.event.color"
+  >
+    <div *ngIf="tile.event.text; else events">
+      {{ tile.event.text }}
     </div>
+    <ng-template #events>
+      <div class="calendar-weekly-body-events">
+        <div
+          class="calendar-weekly-body-events-item"
+          *ngFor="let minute of minutes"
+        ></div>
+      </div>
+    </ng-template>
   </mat-grid-tile>
 </mat-grid-list>

@@ -5,11 +5,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ComponentsModule } from '../components/componets.module';
 
-
 @Component({
   selector: 'calendar-challenge-calendar',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, ComponentsModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ComponentsModule,
+  ],
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
 })

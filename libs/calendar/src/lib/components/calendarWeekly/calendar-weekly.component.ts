@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { MatGridListModule } from '@angular/material/grid-list'
 import {
@@ -19,22 +19,24 @@ export class CalendarViewComponent implements OnInit {
   selected: Date = new Date()
   weekDaysTiles: CalendarTile<ICalendarTile>[] = []
   hourlyTiles: ICalendarOrEventTileArray = []
+  minutes = [0, 15, 30, 45]
+  @Input() numberDaysCalendar = 7
+  calendarColumns = 22 
 
-  constructor() {
+  ngOnInit(): void {
+    this.calendarColumns = this.numberDaysCalendar * 3 + 1;
     const today = new Date()
     this.weekDaysTiles = this.setWeekDaysTiles(today)
     this.hourlyTiles = this.setHourlyTiles()
   }
 
-  ngOnInit(): void {}
-
   getNextMonthlyDays(day: number | undefined, month: number) {
     const date = new Date()
     date.setFullYear(new Date().getFullYear(), month - 1, day)
 
-    let days = []
+    const days = []
 
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= this.numberDaysCalendar; i++) {
       if (i !== 1) date.setDate(date.getDate() + 1)
 
       days.push(date.getDate())
@@ -52,7 +54,7 @@ export class CalendarViewComponent implements OnInit {
       CalendarTile.createCalendarTile<ICalendarTile>({
         text: day.toString(),
         cols: 3,
-        rows: 3,
+        rows: 2,
         color: 'lightblue',
       })
     )
@@ -60,7 +62,7 @@ export class CalendarViewComponent implements OnInit {
     tiles.unshift(
       CalendarTile.createCalendarTile<ICalendarTile>({
         cols: 1,
-        rows: 3,
+        rows: 2,
         color: 'lightblue',
       })
     )
@@ -70,9 +72,9 @@ export class CalendarViewComponent implements OnInit {
 
   setHourlyTiles(): ICalendarOrEventTileArray {
     const hours = Array.from({ length: 24 }, (_, index) => index + 1)
-    let tiles: ICalendarOrEventTileArray = []
+    const tiles: ICalendarOrEventTileArray = []
 
-    hours.map((hour, index) => {
+    hours.map((hour) => {
       tiles.push(
         CalendarTile.createCalendarTile<ICalendarTile>({
           text: `${hour <= 12 ? hour + ' AM' : hour - 12 + ' PM'}`,
@@ -82,7 +84,7 @@ export class CalendarViewComponent implements OnInit {
         })
       )
 
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < this.numberDaysCalendar; i++) {
         tiles.push(
           CalendarTile.createEventTile<IEventTile>({
             cols: 3,

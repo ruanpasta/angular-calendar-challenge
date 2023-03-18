@@ -1,12 +1,14 @@
 <div class="calendar-container">
-    <div class="inline-calendar-card">
-        <p class="red">This is a Calendar</p>
-        <mat-card>
-          <mat-calendar [(selected)]="selected"></mat-calendar>
-        </mat-card>
-        <p>Selected date: {{ selected }}</p>
-    </div>
-    
-    <calendar-challenge-calendar-weekly class="bg-red w-full"></calendar-challenge-calendar-weekly>
-</div>
+  <div class="inline-calendar-card">
+    <p class="red">This is a Calendar</p>
+    <mat-card>
+      <mat-calendar [(selected)]="selected"></mat-calendar>
+    </mat-card>
+    <p>Selected date: {{ selected }}</p>
+  </div>
 
+  <calendar-challenge-calendar-weekly
+    class="bg-red w-full"
+    [numberDaysCalendar]="7"
+  ></calendar-challenge-calendar-weekly>
+</div>
