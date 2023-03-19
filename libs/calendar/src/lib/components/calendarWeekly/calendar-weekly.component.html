@@ -6,10 +6,10 @@
   <mat-grid-tile
     class="calendar-weekly-header"
     *ngFor="let tile of weekDaysTiles"
-    (click)="onCalendarTileClick(tile, 'weekly')"
     [colspan]="tile.event.cols"
     [rowspan]="tile.event.rows"
     [style.background]="tile.event.color"
+    (click)="onCalendarOrEventTileClick(tile)"
   >
     <div *ngIf="tile.event.text">
       {{ tile.event.text }}
@@ -17,7 +17,6 @@
   </mat-grid-tile>
   <mat-grid-tile
     *ngFor="let tile of hourlyTiles"
-    (click)="onCalendarTileClick(tile, 'weekly')"
     [colspan]="tile.event.cols"
     [rowspan]="tile.event.rows"
     [style.background]="tile.event.color"
@@ -29,7 +28,8 @@
       <div class="calendar-weekly-body-events">
         <div
           class="calendar-weekly-body-events-item"
-          *ngFor="let minute of minutes"
+          *ngFor="let minute of tile.event.minutes"
+          (click)="onCalendarOrEventTileClick(tile, minute)"
         ></div>
       </div>
     </ng-template>

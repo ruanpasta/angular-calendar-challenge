@@ -1,4 +1,4 @@
-import { ICalendarTile, IEventTile } from './Tiles'
+import { ICalendarTile, IEventTile } from './Tiles.interface'
 
 export default class CalendarTile<T extends ICalendarTile> {
   constructor(public event: T) {}
@@ -8,17 +8,18 @@ export default class CalendarTile<T extends ICalendarTile> {
     cols,
     rows,
     column,
-    date = new Date(),
     color = 'lightgray',
+    hour
   }: {
     text?: string,
     cols: number,
     rows: number,
     column: number,
-    date?: Date,
     color?: string
+    hour: number
   }): CalendarTile<T> {
-    const event = { text, cols, rows, column, date, color }
+    const minutes = [0, 15, 30, 45]
+    const event = { text, cols, rows, column, hour, color, minutes }
     return new CalendarTile<T>(event as T)
   }
  

@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common'
 import { MatGridListModule } from '@angular/material/grid-list'
 import {
   ICalendarTile,
-  ICalendarOrEventTileArray,
   IEventTile,
-} from '../../models/Tiles'
-import CalendarTile from '../../models/CalendarTile'
+} from '../../core/models/Tiles.interface'
+import CalendarTile from '../../core/models/CalendarTile'
 
 @Component({
   selector: 'calendar-challenge-calendar-weekly',
@@ -18,8 +17,7 @@ import CalendarTile from '../../models/CalendarTile'
 export class CalendarViewComponent implements OnInit {
   selected: Date = new Date()
   weekDaysTiles: CalendarTile<ICalendarTile>[] = []
-  hourlyTiles: ICalendarOrEventTileArray = []
-  minutes = [0, 15, 30, 45]
+  hourlyTiles: CalendarTile<IEventTile>[] = []
   @Input() numberDaysCalendar = 7
   calendarColumns = 22 
 
@@ -70,13 +68,13 @@ export class CalendarViewComponent implements OnInit {
     return tiles
   }
 
-  setHourlyTiles(): ICalendarOrEventTileArray {
+  setHourlyTiles(): CalendarTile<IEventTile>[] {
     const hours = Array.from({ length: 24 }, (_, index) => index + 1)
-    const tiles: ICalendarOrEventTileArray = []
+    const tiles: CalendarTile<IEventTile>[] = []
 
     hours.map((hour) => {
       tiles.push(
-        CalendarTile.createCalendarTile<ICalendarTile>({
+        CalendarTile.createCalendarTile<IEventTile>({
           text: `${hour <= 12 ? hour + ' AM' : hour - 12 + ' PM'}`,
           cols: 1,
           rows: 1,
@@ -91,6 +89,7 @@ export class CalendarViewComponent implements OnInit {
             rows: 1,
             column: i + 1,
             color: 'lightgray',
+            hour
           })
         )
       }
@@ -99,14 +98,10 @@ export class CalendarViewComponent implements OnInit {
     return tiles
   }
 
-  onCalendarTileClick(eventTile: CalendarTile<ICalendarTile>, type: string) {
-    console.log('Tile clicked:', eventTile, type)
-  }
-
   onCalendarOrEventTileClick(
-    eventTile: ICalendarOrEventTileArray,
-    type: string
+    eventTile: (CalendarTile<ICalendarTile> | CalendarTile<IEventTile>),
+    minute?: number,
   ) {
-    console.log('Tile clicked:', eventTile, type)
+    console.log('Tile clicked:', eventTile, minute)
   }
 }

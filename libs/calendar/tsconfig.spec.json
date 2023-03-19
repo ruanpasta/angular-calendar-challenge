@@ -11,5 +11,5 @@
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
-  ]
+, "src/lib/core/models/Appointment.interface.ts", "src/lib/core/models/Tiles.interface.ts"  ]
 }
