@@ -3,7 +3,6 @@ import {
   Input,
   OnInit,
   OnChanges,
-  SimpleChanges,
   OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -20,12 +19,9 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import {
-  AppointmentBase,
   AppointmentDateRange,
   AppointmentOptions,
   AppointmentTypes,
-  EventAppointment,
-  TaskAppointment,
 } from '../../core/models/Appointment.interface';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +29,7 @@ import Appointment from '../../core/models/Appointment';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'calendar-challenge-calendar-weekly',
+  selector: 'calendar-challenge-calendar-view',
   standalone: true,
   imports: [
     CommonModule,
@@ -42,18 +38,20 @@ import { Subscription } from 'rxjs';
     MatMenuModule,
     MatIconModule,
   ],
-  templateUrl: './calendar-weekly.component.html',
-  styleUrls: ['./calendar-weekly.component.scss'],
+  templateUrl: './calendar-view.component.html',
+  styleUrls: ['./calendar-view.component.scss'],
 })
-export class CalendarWeeklyComponent implements OnInit, OnChanges, OnDestroy {
+export class CalendarViewComponent implements OnInit, OnChanges, OnDestroy {
   selected: Date = new Date();
   weekDaysTiles: CalendarTile<ICalendarTile>[] = [];
   hourlyTiles: CalendarTile<IEventTile>[] = [];
-  @Input() numberDaysCalendar = 7;
-  @Input() selectedDay: Date = new Date();
   calendarColumns = 22;
   appointments: Appointment<AppointmentOptions>[] = [];
   appointmentSubscrption: Subscription = new Subscription;
+  @Input() numberDaysCalendar = 7;
+  @Input() selectedDay: Date = new Date();
+
+
 
   constructor(
     private appointmentService: AppointmentsService,
@@ -82,6 +80,8 @@ export class CalendarWeeklyComponent implements OnInit, OnChanges, OnDestroy {
   updateCalendar(isChange?: boolean) {
     this.weekDaysTiles = this.setWeekDaysTiles(this.selectedDay);
     this.hourlyTiles = this.setHourlyTiles();
+    console.log(this.weekDaysTiles)
+    console.log(this.hourlyTiles)
     if (isChange) this.setAppointmentsElements();
   }
 
@@ -186,42 +186,45 @@ export class CalendarWeeklyComponent implements OnInit, OnChanges, OnDestroy {
       })
     );
 
-    tiles.unshift(
-      CalendarTile.createTile<ICalendarTile>({
-        cols: 1,
-        rows: 2,
-        color: 'lightblue',
-      })
-    );
-
     return tiles;
   }
 
   setHourlyTiles(): CalendarTile<IEventTile>[] {
-    const hours = Array.from({ length: 24 }, (_, index) => index + 1);
+    const hours = Array.from({ length: 24 }, (_, index) => index);
     const tiles: CalendarTile<IEventTile>[] = [];
 
-    hours.map((hour) => {
+    hours.map((hour, index) => {
       tiles.push(
         CalendarTile.createTile<IEventTile>({
           text: `${hour <= 12 ? hour + ' AM' : hour - 12 + ' PM'}`,
           cols: 1,
           rows: 1,
-          color: 'lightpink',
+          column: index + 1,
+          color: 'lightgray',
+          hour
         })
       );
+    });
 
-      for (let i = 0; i < this.numberDaysCalendar; i++) {
-        tiles.push(
-          CalendarTile.createTile<IEventTile>({
-            cols: 3,
-            rows: 1,
-            column: i + 1,
-            color: 'lightgray',
-            hour,
-          })
-        );
-      }
+    return tiles;
+  }
+
+  getEventTiles(day: number): CalendarTile<IEventTile>[] {
+    const hours = Array.from({ length: 24 * 4 }, (_, index) => index + 1);
+    const tiles: CalendarTile<IEventTile>[] = [];
+
+    hours.map((hour, index) => {
+      tiles.push(
+        CalendarTile.createTile<IEventTile>({
+          text: '',
+          cols: 1,
+          rows: 1,
+          column: index + 1,
+          color: 'lightgray',
+          hour,
+          day
+        })
+      );
     });
 
     return tiles;

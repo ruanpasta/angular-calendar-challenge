@@ -9,14 +9,14 @@
     [colspan]="tile.event.cols"
     [rowspan]="tile.event.rows"
     [style.background]="tile.event.color"
-    (click)="onCalendarOrEventTileClick(tile)"
   >
     <div *ngIf="tile.event.text">
       {{ tile.event.text }}
     </div>
   </mat-grid-tile>
+
   <mat-grid-tile
-    *ngFor="let tile of hourlyTiles"
+    *ngFor="let tile of hourlyTiles; let indexHourly = index"
     [colspan]="tile.event.cols"
     [rowspan]="tile.event.rows"
     [style.background]="tile.event.color"
@@ -25,12 +25,42 @@
       {{ tile.event.text }}
     </div>
     <ng-template #events>
-      <div class="calendar-weekly-body-events">
+      <div
+        class="calendar-weekly-body-events"
+        cdkDropList
+        #minutesList="cdkDropList"
+        [cdkDropListData]="tile.event.minutes"
+        (cdkDropListDropped)="onDrop($event)"
+      >
         <div
+          [id]="
+            tile.event.column.toLocaleString() +
+            tile.event.hour.toLocaleString() +
+            minute.toLocaleString()
+          "
           class="calendar-weekly-body-events-item"
-          *ngFor="let minute of tile.event.minutes"
-          (click)="onCalendarOrEventTileClick(tile, minute)"
-        ></div>
+          *ngFor="let minute of tile.event.minutes; let indexMinutes = index"
+          (click)="onCalendarOrEventTileClick(tile, $event)"
+          cdkDrag
+        >
+          <div
+            *ngIf="isAppointment(minute)"
+            class="calendar-weekly-appointments"
+            [matMenuTriggerFor]="menu"
+            (click)="$event.stopPropagation()"
+          >
+            {{ getappointmentTitle(minute) }}
+            <mat-menu #menu="matMenu">
+              <button
+                mat-menu-item
+                (click)="onDeleteAppointment(minute, indexHourly, indexMinutes)"
+              >
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
       </div>
     </ng-template>
   </mat-grid-tile>

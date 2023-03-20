@@ -1,0 +1,32 @@
+.calendar-view-container {
+  @apply flex p-3;
+}
+
+.calendar-view-hours {
+  @apply flex flex-col;
+}
+
+.calendar-view-content {
+  @apply w-full;
+}
+
+.calendar-view-header {
+  @apply flex justify-between justify-items-center w-full;
+}
+
+.calendar-view-header-item {
+  @apply w-full bg-red-400;
+}
+
+.calendar-view-body {
+  @apply flex justify-between w-full;
+}
+
+.calendar-view-body-events {
+  @apply w-full;
+}
+
+.calendar-view-body-events-items {
+  @apply w-full bg-green-400 border-l-2 border-t-2 h-2;
+
+}

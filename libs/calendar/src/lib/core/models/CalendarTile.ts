@@ -1,40 +1,34 @@
+import { AppointmentBase, EventAppointment, TaskAppointment } from './Appointment.interface';
 import { ICalendarTile, IEventTile } from './Tiles.interface'
 
 export default class CalendarTile<T extends ICalendarTile> {
   constructor(public event: T) {}
 
-  static createEventTile<T extends IEventTile>({
+  // TODO: improve this code like the Appointments
+  static createTile<T extends ICalendarTile | IEventTile>({
     text = '',
     cols,
     rows,
     column,
     color = 'lightgray',
-    hour
+    hour,
+    day
   }: {
     text?: string,
     cols: number,
     rows: number,
-    column: number,
-    color?: string
-    hour: number
+    column?: number,
+    color?: string,
+    hour?: number,
+    day?: number
   }): CalendarTile<T> {
-    const minutes = [0, 15, 30, 45]
-    const event = { text, cols, rows, column, hour, color, minutes }
-    return new CalendarTile<T>(event as T)
+    if (hour !== undefined) {
+      const minutes = [0, 15, 30, 45];
+      const event = { text, cols, rows, column, hour, color, minutes, day } as T;
+      return new CalendarTile<T>(event);
+    }
+    const calendarTile = { text, cols, rows, color, column } as T;
+    return new CalendarTile<T>(calendarTile);
   }
- 
-  static createCalendarTile<T extends ICalendarTile>({
-    text,
-    cols,
-    rows,
-    color,
-  }: {
-    text?: string,
-    cols: number,
-    rows: number,
-    color?: string
-  }): CalendarTile<T> {
-    const event = { text, cols, rows, color }
-    return new CalendarTile<T>(event as T)
-  }
+
 }

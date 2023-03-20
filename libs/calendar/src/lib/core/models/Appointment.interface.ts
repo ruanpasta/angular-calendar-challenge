@@ -1,17 +1,51 @@
 enum AppointmentTypes {
-    EVENT,
-    TASK,
-    REMINDER,
-    APPOINTMENTSCHEDULE
+  EVENT = 'Event',
+  TASK = 'Tasks',
+  REMINDER = 'Reminder',
 }
 
-interface IAppointment {
-    date: Date
-    title?: string
-    type?: AppointmentTypes
-    guests?: string[]
-    location?: string
-    descripiton?: string
+interface AppointmentDateRange {
+  startDateTime: Date;
+  endDateTime: Date;
 }
 
-export { IAppointment, AppointmentTypes }
+enum AppointmentRecurrenceTypes {
+  DOES_NOT_REPEAT = 'Does not repeat',
+  DAILY = 'Daily',
+  WEEKLY = 'Weekly',
+  MONTLY = 'Montly',
+  ANNUALLY = 'Annually',
+  EVERY_WEEKDAY = 'Every weekday',
+}
+
+interface AppointmentBase {
+  id?: string;
+  dateTime: Date | AppointmentDateRange;
+  recurrence: AppointmentRecurrenceTypes;
+  title?: string;
+  type?: AppointmentTypes;
+  allDay?: boolean;
+}
+
+interface TaskAppointment extends AppointmentBase {
+  description?: string;
+  tasks?: string;
+}
+
+interface EventAppointment extends AppointmentBase {
+  guests?: string[];
+  location?: string;
+  description?: string;
+}
+
+interface AppointmentOptions extends EventAppointment, TaskAppointment, AppointmentBase {};
+
+export {
+  AppointmentBase,
+  EventAppointment,
+  TaskAppointment,
+  AppointmentDateRange,
+  AppointmentTypes,
+  AppointmentRecurrenceTypes,
+  AppointmentOptions
+};
