@@ -210,10 +210,13 @@ export class CalendarViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getEventTiles(day: number): CalendarTile<IEventTile>[] {
-    const hours = Array.from({ length: 24 * 4 }, (_, index) => index + 1);
+    const hours = Array.from({ length: 24 }, (_, index) => index + 1);
+    const minutes = [0, 15, 30, 45];
     const tiles: CalendarTile<IEventTile>[] = [];
 
     hours.map((hour, index) => {
+      for (let i = 0; i < 4; i++) {
+
       tiles.push(
         CalendarTile.createTile<IEventTile>({
           text: '',
@@ -222,9 +225,11 @@ export class CalendarViewComponent implements OnInit, OnChanges, OnDestroy {
           column: index + 1,
           color: 'lightgray',
           hour,
+          minute: minutes[i],
           day
         })
       );
+      }
     });
 
     return tiles;

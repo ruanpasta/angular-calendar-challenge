@@ -10,7 +10,7 @@ interface ICalendarTile {
 }
 
 interface IEventTile extends ICalendarTile {
-  minutes: (number | Appointment<AppointmentOptions>)[];
+  minute: (number | Appointment<AppointmentOptions>);
   hour: number;
   day?: number;
 }
