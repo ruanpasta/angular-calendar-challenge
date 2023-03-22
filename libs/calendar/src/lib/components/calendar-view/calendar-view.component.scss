@@ -1,9 +1,20 @@
 .calendar-view-container {
-  @apply flex p-3;
+  @apply flex pl-3;
 }
 
 .calendar-view-hours {
-  @apply flex flex-col;
+  @apply flex flex-col mt-6 gap-[33px] text-[10px] w-8;
+}
+
+.calendar-view-hours-items {
+  &::after {
+    content: "";
+    border-bottom: 1px solid gray;
+    display: block;
+    position: absolute;
+    z-index: 8;
+    width: 100%;
+  };
 }
 
 .calendar-view-content {
@@ -15,7 +26,7 @@
 }
 
 .calendar-view-header-item {
-  @apply w-full bg-red-400;
+  @apply w-full text-center;
 }
 
 .calendar-view-body {
@@ -23,10 +34,16 @@
 }
 
 .calendar-view-body-events {
-  @apply w-full;
+  @apply w-full ;
+
 }
 
 .calendar-view-body-events-items {
-  @apply w-full bg-green-400 border-l-2 border-t-2 h-2;
+  @apply w-full border-l-2 h-3;
+
+}
+
+.calendar-view-body-events-items-appointment {
+  @apply rounded-md bg-blue-400 relative z-10 h-auto w-auto;
 
 }
