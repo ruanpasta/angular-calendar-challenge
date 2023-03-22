@@ -1,6 +1,10 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -22,7 +26,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { AppointmentsService } from '../../core/services/appointments.service';
 import Appointment from '../../core/models/Appointment';
 
@@ -110,7 +114,12 @@ import Appointment from '../../core/models/Appointment';
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="appointment-form-time">
-            <mat-select formControlName="startTime" required>
+            <mat-select
+              [(ngModel)]="startTimeOption"
+              formControlName="startTime"
+              (selectionChange)="onSelectionChange($event)"
+              required
+            >
               <mat-option *ngFor="let time of times" [value]="time">
                 {{ time }}
               </mat-option>
@@ -133,8 +142,12 @@ import Appointment from '../../core/models/Appointment';
           <div class="appointment-form-times-divider">&horbar;</div>
 
           <mat-form-field appearance="fill" class="appointment-form-time">
-            <mat-select formControlName="endTime" required>
-              <mat-option *ngFor="let time of times" [value]="time">
+            <mat-select
+              [(ngModel)]="endTimeOption"
+              formControlName="endTime"
+              required
+            >
+              <mat-option *ngFor="let time of endTimes" [value]="time">
                 {{ time }}
               </mat-option>
             </mat-select>
@@ -152,9 +165,9 @@ import Appointment from '../../core/models/Appointment';
           </mat-form-field>
         </div>
 
-        <div *ngIf="isType('Tasks')">tasks</div>
+        <div *ngIf="isType('Tasks')">tasks wip</div>
 
-        <div *ngIf="isType('Reminder')">Reminder</div>
+        <div *ngIf="isType('Reminder')">Reminder wip</div>
 
         <mat-dialog-actions class="appointment-dialog-buttons">
           <button mat-button>Save</button>
@@ -199,7 +212,10 @@ export class AppointmentDialogComponent implements AfterViewInit, OnInit {
     date: [undefined, Validators.required],
     startTime: ['', Validators.required],
     endTime: ['', Validators.required],
-    recurrence: [AppointmentRecurrenceTypes.DOES_NOT_REPEAT, Validators.required],
+    recurrence: [
+      AppointmentRecurrenceTypes.DOES_NOT_REPEAT,
+      Validators.required,
+    ],
     type: [AppointmentTypes.EVENT, Validators.required],
     title: ['', Validators.max(250)],
     guests: [[]],
@@ -212,12 +228,19 @@ export class AppointmentDialogComponent implements AfterViewInit, OnInit {
   appointmentsTypes = Object.values(AppointmentTypes);
 
   times: string[] = this.getTimes();
+  endTimes: string[] = this.getTimes();
+
+  startTimeOption = '00:00';
+  endTimeOption = '00:00';
 
   constructor(
     public dialogRef: MatDialogRef<AppointmentDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
     private appointmentService: AppointmentsService
-  ) {}
+  ) {
+    this.setInitialData();
+  }
 
   ngOnInit(): void {
     this.setStartEndTime('00:00', '01:00');
@@ -227,7 +250,7 @@ export class AppointmentDialogComponent implements AfterViewInit, OnInit {
     this.updateType(AppointmentTypes.EVENT);
   }
 
-  updateType(type: AppointmentTypes) {
+  public updateType(type: AppointmentTypes) {
     this.appointmentForm.get('type')?.setValue(type);
 
     for (const appointmentType of this.appointmentsTypes) {
@@ -238,24 +261,46 @@ export class AppointmentDialogComponent implements AfterViewInit, OnInit {
       if (appointmentType === type) element.style.backgroundColor = 'lightblue';
       else element.style.backgroundColor = 'transparent';
     }
-    console.log(this.appointmentForm.get('type')?.value);
   }
 
-  isType(type: string): boolean {
+  public isType(type: string): boolean {
     return this.appointmentForm.get('type')?.value === type;
   }
 
-  onSubmit() {
+  public onSubmit() {
     if (!this.appointmentForm.valid)
       return this.validateForm(this.appointmentForm);
 
     const appointment = this.getAppointment(this.appointmentForm);
 
-    console.log(appointment)
-
     this.appointmentService.create(appointment);
 
     this.dialogRef.close();
+  }
+
+  public onSelectionChange(event: MatSelectChange) {
+    this.endTimes = this.getTimes().filter(
+      (time) =>
+        Number(time.replace(':', '')) >= Number(event.value.replace(':', ''))
+    );
+  }
+
+  private setInitialData() {
+    this.appointmentForm.get('date')?.setValue(this.data.date);
+    const hour =
+      this.times.find(
+        (time) => Number(time.split(':')[0]) === this.data.hour
+      ) || '';
+    const minute =
+      this.endTimes.find(
+        (time) =>
+          Number(time.split(':')[0]) === this.data.hour &&
+          Number(time.split(':')[1]) === this.data.minute
+      ) || '';
+    this.appointmentForm.get('startTime')?.setValue(hour);
+    this.appointmentForm.get('endTime')?.setValue(minute);
+    this.startTimeOption = hour;
+    this.endTimeOption = minute;
   }
 
   private getAppointment(
@@ -272,7 +317,7 @@ export class AppointmentDialogComponent implements AfterViewInit, OnInit {
       description,
       recurrence,
       allDay,
-      tasks
+      tasks,
     } = appointmentForm.value;
 
     switch (type) {
@@ -295,7 +340,7 @@ export class AppointmentDialogComponent implements AfterViewInit, OnInit {
           recurrence,
           title,
           type,
-          allDay
+          allDay,
         });
       }
       default: {
@@ -308,8 +353,8 @@ export class AppointmentDialogComponent implements AfterViewInit, OnInit {
           location,
           guests,
           recurrence,
-          allDay
-        })
+          allDay,
+        });
       }
     }
   }

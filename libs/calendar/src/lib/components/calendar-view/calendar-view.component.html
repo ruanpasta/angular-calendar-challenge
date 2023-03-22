@@ -1,30 +1,59 @@
 <div class="calendar-view-container">
   <div class="calendar-view-hours">
-    <div class="calendar-view-hours-items" *ngFor="let hour of hourlyTiles">
-      a
+    <div class="calendar-view-hours-items" *ngFor="let tlieHour of hourlyTiles">
+      <span *ngIf="tlieHour.event.hour <= 12; else pm">{{ tlieHour.event.hour }} am</span>
+      <ng-template #pm>{{ tlieHour.event.hour - 12}} pm</ng-template>
     </div>
   </div>
   <div class="calendar-view-content">
     <div class="calendar-view-header">
-      <div class="calendar-view-header-item" *ngFor="let hour of weekDaysTiles">
-        b
+      <div class="calendar-view-header-item" *ngFor="let tile of weekDaysTiles">
+        {{ tile.event.text }}
       </div>
     </div>
-    <div class="calendar-view-body">
+    <div class="calendar-view-body" cdkDropListGroup>
       <div
         class="calendar-view-body-events"
         *ngFor="
           let day of getNextMonthlyDays(
             selectedDay.getDate(),
             selectedDay.getMonth()
-          )
+          );
+          let index = index
         "
       >
         <div
           class="calendar-view-body-events-items"
-          *ngFor="let hour of getEventTiles(day)"
+          *ngFor="let eventTile of eventTiles[index]"
+          cdkDropList
+          [cdkDropListData]="eventTile"
+          (cdkDropListDropped)="onDrop($event)"
+          (click)="onEventTileClick(eventTile)"
         >
-          
+          <div
+            *ngIf="eventTile.event.appointment"
+            class="calendar-view-body-events-items-appointment"
+            [style.height.px]="getTileHeight(eventTile.event.appointment)"
+            [matMenuTriggerFor]="menu"
+            (click)="$event.stopPropagation()"
+            cdkDrag
+          >
+            {{ eventTile.event.appointment.event.title || 'No title' }}
+            <mat-menu #menu="matMenu">
+              <button
+                mat-menu-item
+                (click)="
+                  onDeleteAppointment(
+                    eventTile.event.appointment.event.id || '',
+                    day
+                  )
+                "
+              >
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </div>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import Appointment from '../models/Appointment';
 import {
+  AppointmentDateRange,
   AppointmentOptions,
 } from '../models/Appointment.interface';
 
@@ -21,8 +22,6 @@ export class AppointmentsService {
     const appointments = this.appointments.getValue();
     appointments.push(appointment);
     this.appointments.next(appointments);
-
-    console.log(appointments);
   }
 
   delete(appointment: Appointment<AppointmentOptions>) {
@@ -30,7 +29,12 @@ export class AppointmentsService {
     const index = appointments.findIndex(appointmentValue => appointmentValue.event.id === appointment.event.id);
     if (index > -1) appointments.splice(index, 1)
     this.appointments.next(appointments);
+  }
 
-    console.log(this.appointments.getValue());
+  updateDateTime(id: string, dateTime: Date | AppointmentDateRange) {
+    const appointments = this.appointments.getValue();
+    const index = appointments.findIndex(appointmentValue => appointmentValue.event.id === id);
+    if (index > -1) appointments[index].event.dateTime = dateTime
+    this.appointments.next(appointments);
   }
 }

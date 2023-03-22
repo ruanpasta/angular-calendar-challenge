@@ -7,12 +7,16 @@ interface ICalendarTile {
   rows: number;
   column: number;
   color?: string;
+  month?: number;
+  year?: number;
 }
 
 interface IEventTile extends ICalendarTile {
-  minutes: (number | Appointment<AppointmentOptions>)[];
+  minute: number;
+  appointment: Appointment<AppointmentOptions> | null;
   hour: number;
   day?: number;
+  date?: Date;
 }
 
 export { ICalendarTile, IEventTile };
