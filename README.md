@@ -1,7 +1,7 @@
 # Calendar APP Challenge
 
 Bem-vindo(a) ao Calendar APP Challenge.\
-Este projeto foi desenvolvido para atender a um desafio de curto prazo em aproximadamente 3 dias.\
+Este projeto foi desenvolvido para atender a um desafio de curto prazo e foi desenvolvido em aproximadamente 3 dias.
 
 Aqui temos uma simulacao de um calendario com cadastro de agendamentos e _drag and drop_ para alterar a data e hora dos agendamentos. Voce pode criar um novo evento na agenda clicando em Create ou clicando em alguma hora nos dias do calendario.
 
@@ -11,7 +11,7 @@ Algumas configuracoes do projeto ficam em `src/app` porem o principal da aplicac
 O layout e design do projeto estao de acordo com a proposta do desafio.
 
 **Acesse o porjeto em producao:**\
-https://calendar-app-challenge.ruanpasta.com/
+https://angular-calendar-challenge.ruanpasta.com/
 
 [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.
 
