@@ -119,7 +119,7 @@ export class CalendarViewComponent implements OnInit, OnChanges, OnDestroy {
       dateTime.endDateTime
     );
     if (diffInHours < 2) return 'auto';
-    return 20 * diffInHours;
+    return 50 * diffInHours;
   }
 
   public onDeleteAppointment(appointmentId: string, day: number) {
@@ -244,7 +244,7 @@ export class CalendarViewComponent implements OnInit, OnChanges, OnDestroy {
   ): Date | AppointmentDateRange {
     const startDateTime = new Date(
       nextTile.event.year || 0,
-      (nextTile.event.month || 0) - 1,
+      nextTile.event.month || 0,
       nextTile.event.day
     );
     startDateTime.setHours(nextTile.event.hour, nextTile.event.minute, 0, 0);
@@ -259,7 +259,7 @@ export class CalendarViewComponent implements OnInit, OnChanges, OnDestroy {
 
       const endDateTime = new Date(
         nextTile.event.year || 0,
-        (nextTile.event.month || 0) - 1,
+        nextTile.event.month || 0,
         nextTile.event.day
       );
 
