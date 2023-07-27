@@ -3,5 +3,9 @@
 }
 
 .inline-calendar-card {
-    width: 300px;
+    @apply mt-4 flex flex-col w-[300px] gap-4;
+
+    button {
+      @apply max-w-[100px] ml-4;
+    }
 }

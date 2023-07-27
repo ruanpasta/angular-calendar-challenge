@@ -1,5 +1,6 @@
 <div class="calendar-container">
   <div class="inline-calendar-card">
+    <button mat-raised-button color="primary" (click)="openAppointmentDialog()">Create</button>
     <mat-card>
       <mat-calendar [(selected)]="selected"/>
     </mat-card>

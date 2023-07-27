@@ -20,7 +20,6 @@ import {
   AppointmentRecurrenceTypes,
   AppointmentTypes,
   EventAppointment,
-  TaskAppointment,
 } from '../../core/models/Appointment.interface';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';

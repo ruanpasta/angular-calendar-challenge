@@ -13,7 +13,7 @@
     display: block;
     position: absolute;
     z-index: 8;
-    width: 100%;
+    width: calc(100% - 300px - 2rem);
   };
 }
 

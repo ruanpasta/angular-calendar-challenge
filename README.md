@@ -2,6 +2,9 @@
 
 Bem-vindo(a) ao Calendar APP Challenge.\
 Este projeto foi desenvolvido para atender a um desafio de curto prazo em aproximadamente 3 dias.\
+
+Aqui temos uma simulacao de um calendario com cadastro de agendamentos e _drag and drop_ para alterar a data e hora dos agendamentos. Voce pode criar um novo evento na agenda clicando em Create ou clicando em alguma hora nos dias do calendario.
+
 Esse projeto usa `Nx` que eh um _build system_ e a aplicacao foi construida usando **Component First Architecture**.\
 Algumas configuracoes do projeto ficam em `src/app` porem o principal da aplicacao esta em `libs/calendar/src/lib/`.
 
